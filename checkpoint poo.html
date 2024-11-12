@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>poo checkpoint</title>
+</head>
+<body>
+    <script>
+        // Classe Product pour définir les propriétés de base d'un produit
+class Product {
+    constructor(id, name, price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+}
+
+// Classe ShoppingCartItem pour gérer les éléments du panier avec le produit et la quantité
+class ShoppingCartItem {
+    constructor(product, quantity) {
+        this.product = product;
+        this.quantity = quantity;
+    }
+
+    // Méthode pour calculer le prix total de cet élément
+    getTotalPrice() {
+        return this.product.price * this.quantity;
+    }
+}
+
+// Classe ShoppingCart pour gérer le panier d'achat
+class ShoppingCart {
+    constructor() {
+        this.items = [];
+    }
+
+    // Méthode pour ajouter un produit au panier (ou augmenter la quantité si déjà présent)
+    addItem(product, quantity) {
+        const existingItem = this.items.find(item => item.product.id === product.id);
+        if (existingItem) {
+            existingItem.quantity += quantity;
+        } else {
+            this.items.push(new ShoppingCartItem(product, quantity));
+        }
+    }
+
+    // Méthode pour supprimer un produit du panier
+    removeItem(productId) {
+        this.items = this.items.filter(item => item.product.id !== productId);
+    }
+
+    // Méthode pour obtenir le total des éléments (quantité totale)
+    getTotalItems() {
+        return this.items.reduce((total, item) => total + item.quantity, 0);
+    }
+
+    // Méthode pour calculer le prix total de tous les éléments dans le panier
+    getTotalPrice() {
+        return this.items.reduce((total, item) => total + item.getTotalPrice(), 0);
+    }
+
+    // Méthode pour afficher les éléments du panier dans la console
+    displayCart() {
+        this.items.forEach(item => {
+            console.log(`${item.product.name} - Quantité: ${item.quantity} - Prix Total: ${item.getTotalPrice()}€`);
+        });
+        console.log(`Prix Total du Panier: ${this.getTotalPrice()}€`);
+    }
+}
+
+// === Tests des fonctionnalités ===
+
+// Création de quelques produits
+const product1 = new Product(1, 'T-shirt', 20);
+const product2 = new Product(2, 'Jeans', 50);
+const product3 = new Product(3, 'Casquette', 15);
+
+// Création du panier
+const cart = new ShoppingCart();
+
+// Ajout d'éléments au panier
+cart.addItem(product1, 2); // 2 T-shirts
+cart.addItem(product2, 1); // 1 Jeans
+cart.addItem(product3, 3); // 3 Casquettes
+
+// Affichage du panier
+console.log("Panier après ajout des éléments:");
+cart.displayCart();
+
+// Suppression d'un élément (produit1 - T-shirt)
+cart.removeItem(1);
+
+// Affichage du panier après suppression
+console.log("Panier après suppression d'un élément:");
+cart.displayCart();
+
+    </script>
+</body>
+</html>
